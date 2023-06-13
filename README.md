@@ -24,11 +24,12 @@ I will try to bring https://github.com/krisives/d2s-format up to date here.
 
 **Integers are stored in little endian byte order.**
 
-| Offset | Type   | Desc
+| Offset | Type     | Desc
 |--------|----------|------------
 |0       |u32       | Signature (0xaa55aa55)
 |4       |u32       | [Version](#versions)
-|267     |&[u8, 16] | [Character Name](#character-name)
+|12      |u32       | [Checksum](#checksum)
+|267     |[u8, 16]  | [Character Name](#character-name)
 
 ### Versions
 
@@ -37,6 +38,10 @@ Save file version. Current version of the game uses `99`. In the future if versi
 * `<98` is pre D2R
 * `98` is version ??
 * `99` is current version `1.6.74264`
+
+### Checksum
+
+Needs to be re-calculated when editing save file otherwise it will not be valid anymore. Credit for algorithm goes to whoever reverse engineered it.
 
 ### Character Name
 
