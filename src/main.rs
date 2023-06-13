@@ -9,7 +9,7 @@ fn main() {
     // watch_file(file_path);
     let character = load_character(file_path);
     let s = character.signature();
-    println!("Signature {:?}", s);
+    println!("Signature {:x?}", s);
     let v = character.version();
     println!("Version {:?}", v);
     let n = character.name();
@@ -81,8 +81,8 @@ const HEADER_NAME: Field = Field {
 };
 
 impl Character {
-    fn signature(&self) -> String {
-        format!("{:x}", u32::from_le_bytes(self.raw[HEADER_SIGNATURE.range()].try_into().unwrap()))
+    fn signature(&self) -> u32 {
+        u32::from_le_bytes(self.raw[HEADER_SIGNATURE.range()].try_into().unwrap())
     }
 
     fn version(&self) -> u32 {
