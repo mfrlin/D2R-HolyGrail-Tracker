@@ -4,8 +4,13 @@ use std::{thread, time};
 use std::time::SystemTime;
 
 mod d2s;
+mod overlay;
+
 
 fn main() {
+
+    // overlay::show_overlay();
+
     let file_path = r"C:\Users\Martin\Saved Games\Diablo II Resurrected\Grail.d2s";
     // watch_file(file_path);
     let character = d2s::load_character(file_path);
