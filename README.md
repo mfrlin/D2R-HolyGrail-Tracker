@@ -28,6 +28,7 @@ I will try to bring https://github.com/krisives/d2s-format up to date here.
 |--------|----------|------------
 |0       |u32       | Signature (0xaa55aa55)
 |4       |u32       | [Version](#versions)
+|8       |u32       | Size of the file in bytes
 |12      |u32       | [Checksum](#checksum)
 |267     |[u8, 16]  | [Character Name](#character-name)
 

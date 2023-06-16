@@ -9,22 +9,17 @@ mod overlay;
 
 fn main() {
 
-    // overlay::show_overlay();
+    //overlay::show_overlay();
 
-    let file_path = r"C:\Users\Martin\Saved Games\Diablo II Resurrected\Grail.d2s";
+    let file_path = r"C:\Users\Martin\Downloads\d2s-master\examples\chars\99\Grail.d2s";
     // watch_file(file_path);
     let character = d2s::load_character(file_path);
-    let s = character.signature();
-    println!("Signature {:x?}", s);
-    let v = character.version();
-    println!("Version {:?}", v);
-    let n = character.name();
-    println!("Name {:?}", n);
-
-    let current_checksum = character.checksum();
-    let calculated_checksum = character.calculate_checksum();
-    println!("Current checksum {:?}", current_checksum);
-    println!("Calculated checksum {:?}", calculated_checksum);
+    println!("Signature {:x?}", character.signature());
+    println!("Version {:?}", character.version());
+    println!("Size {:?} bytes", character.size());
+    println!("Current checksum {:?}", character.checksum());
+    println!("Calculated checksum {:?}", character.calculate_checksum());
+    println!("Name {:?}", character.name());
 }
 
 fn get_modified_time(file_path: &str) -> SystemTime {

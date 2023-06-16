@@ -9,7 +9,7 @@ pub fn load_character(file_path: &str) -> Character {
 }
 
 pub struct Character {
-    raw: Vec<u8>,
+    pub raw: Vec<u8>,
 }
 
 struct Field {
@@ -33,6 +33,11 @@ const HEADER_VERSION: Field = Field {
     size: 4,
 };
 
+const HEADER_SIZE: Field = Field {
+    offset: 8,
+    size: 4,
+};
+
 const HEADER_CHECKSUM: Field = Field {
     offset: 12,
     size: 4,
@@ -52,16 +57,8 @@ impl Character {
         u32::from_le_bytes(self.raw[HEADER_VERSION.range()].try_into().unwrap())
     }
 
-    pub fn name(&self) -> String {
-        let mut len = HEADER_NAME.size;
-        for (i, c) in self.raw[HEADER_NAME.range()].iter().enumerate() {
-            if *c == 0x0 {
-                len = i;
-                break;
-            }
-        }
-        
-        String::from_utf8_lossy(&self.raw[HEADER_NAME.offset..HEADER_NAME.offset+len]).to_string()
+    pub fn size(&self) -> u32 {
+        u32::from_le_bytes(self.raw[HEADER_SIZE.range()].try_into().unwrap())
     }
 
     pub fn checksum(&self) -> u32 {
@@ -82,5 +79,17 @@ impl Character {
         }
 
         checksum
+    }
+
+    pub fn name(&self) -> String {
+        let mut len = HEADER_NAME.size;
+        for (i, c) in self.raw[HEADER_NAME.range()].iter().enumerate() {
+            if *c == 0x0 {
+                len = i;
+                break;
+            }
+        }
+        
+        String::from_utf8_lossy(&self.raw[HEADER_NAME.offset..HEADER_NAME.offset+len]).to_string()
     }
 }
