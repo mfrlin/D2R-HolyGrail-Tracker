@@ -23,6 +23,7 @@ fn main() {
     println!("Died {:?}", character.died());
     println!("Expansion {:?}", character.expansion());
     println!("Ladder {:?}", character.ladder());
+    println!("Class {:?}", character.class());
 
     println!("Name {:?}", character.name());
 }

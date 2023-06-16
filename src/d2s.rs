@@ -17,8 +17,21 @@ const HEADER_VERSION: Range<usize> = 4..8;
 const HEADER_SIZE: Range<usize> = 8..12;
 const HEADER_CHECKSUM: Range<usize> = 12..16;
 const HEADER_STATUS: usize = 36;
-
+const HEADER_CLASS: usize = 40;
 const HEADER_NAME: Range<usize> = 267..267+16;
+
+fn CLASSES(class: u8) -> String {
+    match class {
+        0 => "Amazon".to_string(),
+        1 => "Sorceress".to_string(),
+        2 => "Necromancer".to_string(),
+        3 => "Paladin".to_string(),
+        4 => "Barbarian".to_string(),
+        5 => "Druid".to_string(),
+        6 => "Assassin".to_string(),
+        _ => panic!(),
+    }
+}
 
 impl Character {
     pub fn signature(&self) -> u32 {
@@ -71,6 +84,10 @@ impl Character {
 
     fn _status(&self, status: u8) -> bool {
         (self.raw[HEADER_STATUS] & status) != 0
+    }
+
+    pub fn class(&self) -> String {
+        CLASSES(self.raw[HEADER_CLASS])
     }
 
     pub fn name(&self) -> String {

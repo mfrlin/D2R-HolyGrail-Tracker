@@ -30,8 +30,11 @@ I will try to bring https://github.com/krisives/d2s-format up to date here.
 |4       |u32       | [Version](#versions)
 |8       |u32       | Size of the file in bytes
 |12      |u32       | [Checksum](#checksum)
-|16      |N/A       | Unknown
+|16      |N/A       | ?
 |36      |u8        | [Character Status](#character-status)
+|37      |u8        | Progression?
+|38      |[u8, 2]   | Active arms?
+|40      |u8        | [Character Class](#character-class)
 |267     |[u8, 16]  | [Character Name](#character-name)
 
 ### Versions
@@ -60,6 +63,18 @@ Bit | Desc
 5   | Expansion
 6   | Ladder
 7   | ?
+
+### Character Class
+
+N  | Class
+---|-------
+0  | Amazon
+1  | Sorceress
+2  | Necromancer
+3  | Paladin
+4  | Barbarian
+5  | Druid
+6  | Assassin
 
 ### Character Name
 
