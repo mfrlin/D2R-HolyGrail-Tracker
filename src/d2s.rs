@@ -12,64 +12,35 @@ pub struct Character {
     pub raw: Vec<u8>,
 }
 
-struct Field {
-    offset: usize,
-    size: usize,
-}
+const HEADER_SIGNATURE: Range<usize> = 0..4;
+const HEADER_VERSION: Range<usize> = 4..8;
+const HEADER_SIZE: Range<usize> = 8..12;
+const HEADER_CHECKSUM: Range<usize> = 12..16;
 
-impl Field {
-    fn range(&self) -> Range<usize> {
-        self.offset..self.offset+self.size
-    }
-}
-
-const HEADER_SIGNATURE: Field = Field {
-    offset: 0,
-    size: 4,
-};
-
-const HEADER_VERSION: Field = Field {
-    offset: 4,
-    size: 4,
-};
-
-const HEADER_SIZE: Field = Field {
-    offset: 8,
-    size: 4,
-};
-
-const HEADER_CHECKSUM: Field = Field {
-    offset: 12,
-    size: 4,
-};
-
-const HEADER_NAME: Field = Field {
-    offset: 267,
-    size: 16,
-};
+const HEADER_NAME: Range<usize> = 267..267+16;
 
 impl Character {
     pub fn signature(&self) -> u32 {
-        u32::from_le_bytes(self.raw[HEADER_SIGNATURE.range()].try_into().unwrap())
+        u32::from_le_bytes(self.raw[HEADER_SIGNATURE].try_into().unwrap())
     }
 
     pub fn version(&self) -> u32 {
-        u32::from_le_bytes(self.raw[HEADER_VERSION.range()].try_into().unwrap())
+        u32::from_le_bytes(self.raw[HEADER_VERSION].try_into().unwrap())
     }
 
     pub fn size(&self) -> u32 {
-        u32::from_le_bytes(self.raw[HEADER_SIZE.range()].try_into().unwrap())
+        u32::from_le_bytes(self.raw[HEADER_SIZE].try_into().unwrap())
     }
 
     pub fn checksum(&self) -> u32 {
-        u32::from_le_bytes(self.raw[HEADER_CHECKSUM.range()].try_into().unwrap())
+        u32::from_le_bytes(self.raw[HEADER_CHECKSUM].try_into().unwrap())
     }
 
     pub fn calculate_checksum(&self) -> u32 {
         let mut checksum: u32 = 0;
         for (i, b) in self.raw.iter().enumerate() {
             let mut byte = *b as u32;
-            if HEADER_CHECKSUM.range().contains(&i) {
+            if HEADER_CHECKSUM.contains(&i) {
                 byte = 0;
             }
             if checksum & 0x80000000 != 0 {
@@ -82,14 +53,14 @@ impl Character {
     }
 
     pub fn name(&self) -> String {
-        let mut len = HEADER_NAME.size;
-        for (i, c) in self.raw[HEADER_NAME.range()].iter().enumerate() {
+        let mut len = HEADER_NAME.len();
+        for (i, c) in self.raw[HEADER_NAME].iter().enumerate() {
             if *c == 0x0 {
                 len = i;
                 break;
             }
         }
         
-        String::from_utf8_lossy(&self.raw[HEADER_NAME.offset..HEADER_NAME.offset+len]).to_string()
+        String::from_utf8_lossy(&self.raw[HEADER_NAME.start..HEADER_NAME.start+len]).to_string()
     }
 }
