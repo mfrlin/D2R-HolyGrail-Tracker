@@ -16,6 +16,7 @@ const HEADER_SIGNATURE: Range<usize> = 0..4;
 const HEADER_VERSION: Range<usize> = 4..8;
 const HEADER_SIZE: Range<usize> = 8..12;
 const HEADER_CHECKSUM: Range<usize> = 12..16;
+const HEADER_STATUS: usize = 36;
 
 const HEADER_NAME: Range<usize> = 267..267+16;
 
@@ -52,6 +53,26 @@ impl Character {
         checksum
     }
 
+    pub fn hardcore(&self) -> bool {
+        self._status(0b0100)
+    }
+
+    pub fn died(&self) -> bool {
+        self._status(0b1000)
+    }
+
+    pub fn expansion(&self) -> bool {
+        self._status(0b0010_0000)
+    }
+
+    pub fn ladder(&self) -> bool {
+        self._status(0b0100_0000)
+    }
+
+    fn _status(&self, status: u8) -> bool {
+        (self.raw[HEADER_STATUS] & status) != 0
+    }
+
     pub fn name(&self) -> String {
         let mut len = HEADER_NAME.len();
         for (i, c) in self.raw[HEADER_NAME].iter().enumerate() {
@@ -60,7 +81,6 @@ impl Character {
                 break;
             }
         }
-        
         String::from_utf8_lossy(&self.raw[HEADER_NAME.start..HEADER_NAME.start+len]).to_string()
     }
 }

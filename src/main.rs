@@ -19,6 +19,11 @@ fn main() {
     println!("Size {:?} bytes", character.size());
     println!("Current checksum {:?}", character.checksum());
     println!("Calculated checksum {:?}", character.calculate_checksum());
+    println!("Hardcore {:?}", character.hardcore());
+    println!("Died {:?}", character.died());
+    println!("Expansion {:?}", character.expansion());
+    println!("Ladder {:?}", character.ladder());
+
     println!("Name {:?}", character.name());
 }
 

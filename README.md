@@ -30,6 +30,8 @@ I will try to bring https://github.com/krisives/d2s-format up to date here.
 |4       |u32       | [Version](#versions)
 |8       |u32       | Size of the file in bytes
 |12      |u32       | [Checksum](#checksum)
+|16      |N/A       | Unknown
+|36      |u8        | [Character Status](#character-status)
 |267     |[u8, 16]  | [Character Name](#character-name)
 
 ### Versions
@@ -43,6 +45,21 @@ Save file version. Current version of the game uses `99`. In the future if versi
 ### Checksum
 
 Needs to be re-calculated when editing save file otherwise it will not be valid anymore. Credit for algorithm goes to whoever reverse engineered it.
+
+### Character Status
+
+8-bit field of flags for statuses 
+
+Bit | Desc
+----|------
+0   | ?
+1   | ?
+2   | Hardcore
+3   | Died
+4   | ?
+5   | Expansion
+6   | Ladder
+7   | ?
 
 ### Character Name
 
