@@ -1,6 +1,9 @@
 use std::fs;
 use std::ops::Range;
 
+#[cfg(test)]
+mod tests;
+
 pub fn load_character_from_file(file_path: &str) -> Character {
     Character {
         bytes: fs::read(file_path).unwrap(),
