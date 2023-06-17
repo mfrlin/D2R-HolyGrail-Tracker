@@ -1,15 +1,18 @@
 use std::fs;
 use std::ops::Range;
 
-pub fn load_character(file_path: &str) -> Character {
+pub fn load_character_from_file(file_path: &str) -> Character {
     Character {
-        raw: fs::read(file_path).unwrap(),
+        bytes: fs::read(file_path).unwrap(),
     }
+}
 
+pub fn save_character_to_file(file_path: &str, character: Character) {
+    fs::write(file_path, &character.bytes).unwrap()
 }
 
 pub struct Character {
-    pub raw: Vec<u8>,
+    pub bytes: Vec<u8>,
 }
 
 const HEADER_SIGNATURE: Range<usize> = 0..4;
@@ -35,24 +38,24 @@ fn CLASSES(class: u8) -> String {
 
 impl Character {
     pub fn signature(&self) -> u32 {
-        u32::from_le_bytes(self.raw[HEADER_SIGNATURE].try_into().unwrap())
+        u32::from_le_bytes(self.bytes[HEADER_SIGNATURE].try_into().unwrap())
     }
 
     pub fn version(&self) -> u32 {
-        u32::from_le_bytes(self.raw[HEADER_VERSION].try_into().unwrap())
+        u32::from_le_bytes(self.bytes[HEADER_VERSION].try_into().unwrap())
     }
 
     pub fn size(&self) -> u32 {
-        u32::from_le_bytes(self.raw[HEADER_SIZE].try_into().unwrap())
+        u32::from_le_bytes(self.bytes[HEADER_SIZE].try_into().unwrap())
     }
 
     pub fn checksum(&self) -> u32 {
-        u32::from_le_bytes(self.raw[HEADER_CHECKSUM].try_into().unwrap())
+        u32::from_le_bytes(self.bytes[HEADER_CHECKSUM].try_into().unwrap())
     }
 
     pub fn calculate_checksum(&self) -> u32 {
         let mut checksum: u32 = 0;
-        for (i, b) in self.raw.iter().enumerate() {
+        for (i, b) in self.bytes.iter().enumerate() {
             let mut byte = *b as u32;
             if HEADER_CHECKSUM.contains(&i) {
                 byte = 0;
@@ -83,21 +86,21 @@ impl Character {
     }
 
     fn _status(&self, status: u8) -> bool {
-        (self.raw[HEADER_STATUS] & status) != 0
+        (self.bytes[HEADER_STATUS] & status) != 0
     }
 
     pub fn class(&self) -> String {
-        CLASSES(self.raw[HEADER_CLASS])
+        CLASSES(self.bytes[HEADER_CLASS])
     }
 
     pub fn name(&self) -> String {
         let mut len = HEADER_NAME.len();
-        for (i, c) in self.raw[HEADER_NAME].iter().enumerate() {
+        for (i, c) in self.bytes[HEADER_NAME].iter().enumerate() {
             if *c == 0x0 {
                 len = i;
                 break;
             }
         }
-        String::from_utf8_lossy(&self.raw[HEADER_NAME.start..HEADER_NAME.start+len]).to_string()
+        String::from_utf8_lossy(&self.bytes[HEADER_NAME.start..HEADER_NAME.start+len]).to_string()
     }
 }

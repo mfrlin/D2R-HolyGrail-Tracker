@@ -13,7 +13,7 @@ fn main() {
 
     let file_path = r"C:\Users\Martin\Downloads\d2s-master\examples\chars\99\Grail.d2s";
     // watch_file(file_path);
-    let character = d2s::load_character(file_path);
+    let character = d2s::load_character_from_file(file_path);
     println!("Signature {:x?}", character.signature());
     println!("Version {:?}", character.version());
     println!("Size {:?} bytes", character.size());
@@ -26,6 +26,7 @@ fn main() {
     println!("Class {:?}", character.class());
 
     println!("Name {:?}", character.name());
+    d2s::save_character_to_file(r"C:\Users\Martin\Downloads\d2s-master\examples\chars\99\Grail2.d2s", character);
 }
 
 fn get_modified_time(file_path: &str) -> SystemTime {
@@ -43,4 +44,8 @@ fn watch_file(file_path: &str) -> ! {
         }
         thread::sleep(time::Duration::from_millis(100));
     }
+}
+
+fn write_file(file_path: &str) {
+
 }
